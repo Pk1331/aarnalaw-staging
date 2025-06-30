@@ -1,65 +1,12 @@
-import dynamic from 'next/dynamic';
+import Banner from '../components/HomePage/Banner';
+import HomeInsights from '@/components/HomePage/HomeInsights';
+import WhatWeDo from '../components/HomePage/WhatWeDo';
+import KindOfDispute from '../components/HomePage/KindOfDisputesWeDo';
+import Testimonials from '../components/HomePage/Testimonials';
+import TrackRecords from '../components/HomePage/Trackrecords';
+import OurCredentials from '../components/HomePage/OurCredentials';
+import OurNetwork from '../components/HomePage/OurNetwork';
 import configData from '../config.json';
-import { Suspense } from 'react';
-
-// Critical above-the-fold components - load immediately
-const Banner = dynamic(() => import('../components/HomePage/Banner'), {
-  ssr: true, // Enable SSR for critical content
-  loading: () => <div className="h-[70vh] w-full bg-gray-100 animate-pulse" />,
-});
-
-// High priority components - load after banner
-const HomeInsights = dynamic(
-  () => import('@/components/HomePage/HomeInsights'),
-  {
-    ssr: true, // Enable SSR for better SEO and initial load
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-  }
-);
-
-const WhatWeDo = dynamic(() => import('../components/HomePage/WhatWeDo'), {
-  ssr: true, // Enable SSR
-  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-});
-
-// Medium priority components - load with delay
-const KindOfDispute = dynamic(
-  () => import('../components/HomePage/KindOfDisputesWeDo'),
-  {
-    ssr: false, // Keep client-side for interactive features
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-  }
-);
-
-// Lower priority components - load last
-const Testimonials = dynamic(
-  () => import('../components/HomePage/Testimonials'),
-  {
-    ssr: false, // Keep client-side for carousel functionality
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-  }
-);
-
-const TrackRecords = dynamic(
-  () => import('../components/HomePage/Trackrecords'),
-  {
-    ssr: false,
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-  }
-);
-
-const OurCredentials = dynamic(
-  () => import('../components/HomePage/OurCredentials'),
-  {
-    ssr: false, // Keep client-side for carousel
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-  }
-);
-
-const OurNetwork = dynamic(() => import('../components/HomePage/OurNetwork'), {
-  ssr: false, // Keep client-side for map loading
-  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-});
 
 export const metadata = {
   title: 'Aarna Law - Leading Law Firm in India',
@@ -113,7 +60,7 @@ async function getInsights(): Promise<ProcessedInsight[]> {
     const insightsResponse = await fetch(
       `${configData.SERVER_URL}posts?_embed&categories[]=13&status[]=publish&production_mode[]=${server}&per_page=${page}`,
       { 
-        next: { revalidate: 300 },
+        next: { revalidate: 0 },
         headers: {
           'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
         }
@@ -142,49 +89,19 @@ async function getInsights(): Promise<ProcessedInsight[]> {
   }
 }
 
-// Loading components for better UX
-const LoadingSection = ({ height = "h-96" }: { height?: string }) => (
-  <div className={`w-full bg-gray-100 animate-pulse ${height}`} />
-);
-
 export default async function Home() {
   const initialInsights = await getInsights();
 
   return (
     <>
-      {/* Critical above-the-fold content */}
       <Banner />
-      
-      {/* High priority content */}
-      <Suspense fallback={<LoadingSection />}>
-        <HomeInsights initialInsights={initialInsights} />
-      </Suspense>
-      
-      <Suspense fallback={<LoadingSection />}>
-        <WhatWeDo />
-      </Suspense>
-      
-      {/* Medium priority content */}
-      <Suspense fallback={<LoadingSection />}>
-        <KindOfDispute />
-      </Suspense>
-      
-      {/* Lower priority content - load after user interaction */}
-      <Suspense fallback={<LoadingSection />}>
-        <Testimonials />
-      </Suspense>
-      
-      <Suspense fallback={<LoadingSection />}>
-        <TrackRecords />
-      </Suspense>
-      
-      <Suspense fallback={<LoadingSection />}>
-        <OurCredentials />
-      </Suspense>
-      
-      <Suspense fallback={<LoadingSection />}>
-        <OurNetwork />
-      </Suspense>
+      <HomeInsights initialInsights={initialInsights} />
+      <WhatWeDo />
+      <KindOfDispute />
+      <Testimonials />
+      <TrackRecords />
+      <OurCredentials />
+      <OurNetwork />
     </>
   );
 }

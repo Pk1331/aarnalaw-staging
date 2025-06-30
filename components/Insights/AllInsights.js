@@ -155,7 +155,8 @@ function AllInsights({
                   alt={item.title.rendered}
                   className="h-48 w-full rounded-t-lg object-cover"
                   width={400}
-                  height={300}
+                  height={280}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
                   priority={index < 3}
                   loading={index < 3 ? "eager" : "lazy"}
                 />
