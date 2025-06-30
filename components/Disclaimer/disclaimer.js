@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { optimizeHTMLContent } from "../../utils/contentOptimizer";
 
 const Disclaimer = () => {
-  const [page, setPage] = useState(null); // State to store page data
-  const [error, setError] = useState(null); // State to handle errors
+  const [page, setPage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPage = async () => {
@@ -28,11 +29,11 @@ const Disclaimer = () => {
   }
 
   return (
-    <>
+    <main className="pt-16">
       <style>
         {`
           ol {
-            list-style-type: decimal; /* Ensures numbers appear */
+            list-style-type: decimal;
             margin: 1rem 0;
             padding-left: 2rem;
           }
@@ -42,19 +43,20 @@ const Disclaimer = () => {
           }
         `}
       </style>
-      {/* Center the entire content */}
-      <div className="flex items-center justify-center pt-16">
-        <div className="w-11/12">
-          {page ? (
-            <div
-              dangerouslySetInnerHTML={{ __html: page.content.rendered }}
-            ></div>
-          ) : (
-            <div className="skeleton-loader w-full h-64 bg-gray-200 rounded-md"></div> // Replace with a skeleton loader or empty placeholder
-          )}
-        </div>
+      
+      <div className="w-11/12 mx-auto">
+        {page ? (
+          <article
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ 
+              __html: optimizeHTMLContent(page.content.rendered) 
+            }}
+          />
+        ) : (
+          <div className="w-full h-64 bg-gray-200 rounded-md animate-pulse" />
+        )}
       </div>
-    </>
+    </main>
   );
 };
 

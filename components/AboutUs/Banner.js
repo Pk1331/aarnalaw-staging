@@ -10,6 +10,7 @@ export default function Banner() {
         src="/aboutUs/aboutusbanner.png"
         alt="About Us"
         fill
+        sizes="100vw"
         priority={true}
         className="object-cover"
         quality={75}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { optimizeHTMLContent } from "../../utils/contentOptimizer";
 
 const TermsOfUse = () => {
   const [page, setPage] = useState(null); // State to store page data
@@ -28,7 +29,7 @@ const TermsOfUse = () => {
   }
 
   return (
-    <>
+    <main className="pt-16">
       <style>
         {`
           ol {
@@ -43,18 +44,19 @@ const TermsOfUse = () => {
         `}
       </style>
       {/* Center the entire content */}
-      <div className="flex items-center justify-center pt-16 ">
-        <div className="md:w-11/12 w-full overflow-hidden p-4">
-          {page ? (
-            <div
-              dangerouslySetInnerHTML={{ __html: page.content.rendered }}
-            ></div>
-          ) : (
-            <div className="skeleton-loader w-full h-64 bg-gray-200 rounded-md"></div> // Replace with a skeleton loader or empty placeholder
-          )}
-        </div>
+      <div className="w-11/12 mx-auto p-4">
+        {page ? (
+          <article
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ 
+              __html: optimizeHTMLContent(page.content.rendered) 
+            }}
+          />
+        ) : (
+          <div className="w-full h-64 bg-gray-200 rounded-md animate-pulse" />
+        )}
       </div>
-    </>
+    </main>
   );
 };
 

@@ -7,12 +7,24 @@ import "slick-carousel/slick/slick-theme.css";
 import Link from "next/link";
 import Image from "next/image";
 import { leftArrow, rightArrow } from "../../utils/icons";
-import configData from "../../config"; // Adjust the path if needed
+import configData from "../../config.json";
 import { logPerformanceReport } from "../../utils/performanceTest";
 
-export default function HomeInsights({ initialInsights = [] }) {
-  const sliderRef = useRef(null);
-  const [insightsData, setInsightsData] = useState(initialInsights);
+interface Insight {
+  id: number;
+  slug: string;
+  imageUrl: string;
+  title: string;
+  desc: string;
+}
+
+interface HomeInsightsProps {
+  initialInsights?: Insight[];
+}
+
+export default function HomeInsights({ initialInsights = [] }: HomeInsightsProps) {
+  const sliderRef = useRef<InsightSlider>(null);
+  const [insightsData, setInsightsData] = useState<Insight[]>(initialInsights);
   const isInitialLoading = insightsData.length === 0;
 
   useEffect(() => {
@@ -34,9 +46,9 @@ export default function HomeInsights({ initialInsights = [] }) {
         const posts = await insightsResponse.json();
 
         const latestInsights = posts
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
           .slice(0, 6)
-          .map((item) => ({
+          .map((item: any) => ({
             id: item.id,
             slug: item.slug,
             imageUrl:
@@ -52,8 +64,11 @@ export default function HomeInsights({ initialInsights = [] }) {
       }
     };
 
-    fetchInsights();
-  }, []);
+    // Only fetch if no initial insights provided
+    if (initialInsights.length === 0) {
+      fetchInsights();
+    }
+  }, [initialInsights.length]);
 
   // Monitor performance after component mounts
   useEffect(() => {
@@ -187,4 +202,4 @@ export default function HomeInsights({ initialInsights = [] }) {
       </div>
     </section>
   );
-}
+} 

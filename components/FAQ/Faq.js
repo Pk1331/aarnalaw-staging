@@ -55,7 +55,7 @@ const Faq = ({ faqs = [] }) => {
   };
 
   return (
-    <div className="max-w-4xl container mx-auto py-6 sm:py-12 px-4 md:px-0">
+    <section className="max-w-4xl container mx-auto py-6 sm:py-12 px-4 md:px-0">
       {faqs.length > 0 && (
         <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8">
           Frequently Asked Questions
@@ -63,7 +63,7 @@ const Faq = ({ faqs = [] }) => {
       )}
       <div className="space-y-4">
         {faqs.map((faq, index) => (
-          <div
+          <article
             key={index}
             className="bg-white shadow-md rounded-2xl p-4 sm:p-6 transition-all duration-300"
           >
@@ -74,14 +74,12 @@ const Faq = ({ faqs = [] }) => {
               <h3 className="flex-1 text-base sm:text-lg font-semibold mr-3">
                 {faq.question}
               </h3>
-              <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
-                <IoIosArrowDown
-                  className={`transition-transform duration-300 ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
-                  size={24}
-                />
-              </span>
+              <IoIosArrowDown
+                className={`transition-transform duration-300 ${
+                  openIndex === index ? "rotate-180" : ""
+                }`}
+                size={24}
+              />
             </button>
 
             <div
@@ -96,10 +94,10 @@ const Faq = ({ faqs = [] }) => {
             >
               {renderAnswer(faq.answer)}
             </div>
-          </div>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

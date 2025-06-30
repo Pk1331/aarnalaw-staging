@@ -83,7 +83,8 @@ const Podcasts = () => {
                 height={500}
                 className="h-[100px] w-[200px]"
                 alt={item.title}
-                loading="lazy"
+                loading={index === 0 ? "eager" : "lazy"}
+                priority={index === 0}
               />
               <h2 className="font-bold mt-3">{item.title}</h2>
               <p className="text-center text-sm">{item.desc}</p>

@@ -19,40 +19,62 @@ const Testimonials = () => {
 
 
   const NextArrow = () => (
-    <div
-      className="cursor-pointer rounded-full bg-custom-blue p-3 text-xl text-white hover:bg-custom-red"
-      onClick={() => sliderRef.current.slickNext()}
+    <button
+      onClick={() => sliderRef.current?.slickNext()}
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-custom-blue text-white hover:bg-blue-600"
     >
-      {rightArrow}
-    </div>
+      <svg
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 5l7 7-7 7"
+        />
+      </svg>
+    </button>
   );
 
   const PrevArrow = () => (
-    <div
-      className="cursor-pointer rounded-full bg-custom-blue p-3 text-xl text-white hover:bg-custom-red"
-      onClick={() => sliderRef.current.slickPrev()}
+    <button
+      onClick={() => sliderRef.current?.slickPrev()}
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-custom-blue text-white hover:bg-blue-600"
     >
-      {leftArrow}
-    </div>
+      <svg
+        className="h-4 w-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+    </button>
   );
 
-  var setting = {
-    speed: 500,
-    slidesToShow: 2,
-    initialSlide: 1,
-    slidesToScroll: 1,
-    fade: false,
-    autoplay: true,
-    arrows: false,
+  const setting = {
     dots: false,
-
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
-          infinite: false,
         },
       },
       {
@@ -69,7 +91,7 @@ const Testimonials = () => {
     <>
       <div className="relative mx-auto mb-14 w-11/12">
         <h2 className="block py-5 text-center text-2xl font-semibold text-custom-blue md:hidden">
-          Client’s Testimonials
+          Client's Testimonials
         </h2>
 
         <div className="mr-1 flex justify-end ">
@@ -86,7 +108,7 @@ const Testimonials = () => {
           <div className="h-96 w-[260px] bg-custom-blue md:h-[437px] md:w-[559px]"></div>
           <div className="mr-1 space-y-6 self-end text-right md:mr-28">
             <h2 className="hidden p-2 text-xl font-semibold text-custom-blue md:block md:text-2xl">
-              Client’s <br /> Testimonials
+              Client's <br /> Testimonials
             </h2>
             <div className="flex justify-end gap-2">
               <PrevArrow />
@@ -98,7 +120,7 @@ const Testimonials = () => {
         <div className="absolute bottom-10 w-full gap-10 md:bottom-28 md:right-[200px] md:w-3/4">
           <InsightSlider ref={sliderRef} {...setting}>
           {translations.testimonialDetails.map((items, index) =>(
-              <div key={index.id} className="h-full">
+              <div key={index} className="h-full">
                 <div className="mx-2 mb-10 flex h-[250px] w-auto flex-col justify-center gap-1 bg-white p-5 shadow-lg md:w-[460px]">
                   <div className="flex items-center gap-4">
                     <div className="flex-1">
@@ -121,7 +143,8 @@ const Testimonials = () => {
                         height={90}
                         className="object-cover"
                         alt={items.name}
-                         loading="lazy"
+                        loading="lazy"
+                        style={{ width: 'auto', height: 'auto' }}
                       />
                     </div>
                   </div>

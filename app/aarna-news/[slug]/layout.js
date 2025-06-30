@@ -10,6 +10,7 @@ export async function generateMetadata({ params }) {
     return {
       title: "Blog Not Found | Aarna Law",
       description: "The blog you are looking for is not available.",
+      metadataBase: new URL("https://www.aarnalaw.com/aarna-news/"),
     };
   }
 
@@ -23,6 +24,7 @@ export async function generateMetadata({ params }) {
   return {
     title: blog.acf?.meta_title || blog.title.rendered,
     description: blog.acf?.meta_description || "Read more about this topic.",
+    metadataBase: new URL("https://www.aarnalaw.com/aarna-news/"),
     openGraph: {
       title: blog.acf?.meta_title || blog.title.rendered,
       description: blog.acf?.meta_description || "Read more about this topic.",

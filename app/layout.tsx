@@ -57,6 +57,35 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
 
+        {/* Performance Monitoring */}
+        <Script
+          id="performance-monitor"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Monitor DOM size
+              function monitorDOMSize() {
+                const totalElements = document.getElementsByTagName('*').length;
+                const bodyElements = document.body.getElementsByTagName('*').length;
+                
+                if (totalElements > 800) {
+                  console.warn('High DOM size detected:', totalElements, 'elements');
+                }
+                
+                return { totalElements, bodyElements };
+              }
+              
+              // Monitor on page load and after dynamic content loads
+              window.addEventListener('load', () => {
+                setTimeout(monitorDOMSize, 1000);
+              });
+              
+              // Monitor periodically
+              setInterval(monitorDOMSize, 10000);
+            `
+          }}
+        />
+
         {/* GTM Noscript */}
         <noscript>
           <iframe

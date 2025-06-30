@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { optimizeHTMLContent } from "../../utils/contentOptimizer";
 
-const TermsOfUse = () => {
-  const [page, setPage] = useState(null); // State to store page data
-  const [error, setError] = useState(null); // State to handle errors
+const PrivacyPolicy = () => {
+  const [page, setPage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPage = async () => {
@@ -28,11 +29,11 @@ const TermsOfUse = () => {
   }
 
   return (
-    <>
+    <main className="pt-16">
       <style>
         {`
           ol {
-            list-style-type: decimal; /* Ensures numbers appear */
+            list-style-type: decimal;
             margin: 1rem 0;
             padding-left: 2rem;
           }
@@ -41,7 +42,7 @@ const TermsOfUse = () => {
             line-height: 1.5;
           }
           a {
-            color: #3498db; /* Custom link color */
+            color: #3498db;
             text-decoration: underline;
           }
           strong {
@@ -49,20 +50,21 @@ const TermsOfUse = () => {
           }
         `}
       </style>
-      {/* Center the entire content */}
-      <div className="flex items-center justify-center pt-16">
-        <div className="md:w-11/12 w-full overflow-hidden p-4">
-          {page ? (
-            <div
-              dangerouslySetInnerHTML={{ __html: page.content.rendered }}
-            ></div>
-          ) : (
-            <div className="skeleton-loader w-full h-64 bg-gray-200 rounded-md"></div>
-          )}
-        </div>
+      
+      <div className="w-11/12 mx-auto p-4">
+        {page ? (
+          <article
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ 
+              __html: optimizeHTMLContent(page.content.rendered) 
+            }}
+          />
+        ) : (
+          <div className="w-full h-64 bg-gray-200 rounded-md animate-pulse" />
+        )}
       </div>
-    </>
+    </main>
   );
 };
 
-export default TermsOfUse;
+export default PrivacyPolicy;

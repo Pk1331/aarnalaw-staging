@@ -13,18 +13,20 @@ export default function Banner() {
         <Image
           src="/PracticeArea/PracticeAreas.png"
           fill
+          sizes="(min-width: 768px) 100vw, 0vw"
           priority
           className="hidden md:block object-cover"
-          alt=""
+          alt="Practice Areas Banner"
           quality={90}
         />
         {/* Mobile banner */}
         <Image
           src="/PracticeArea/PracticeAreaMobileBanner.jpg"
           fill
+          sizes="(max-width: 767px) 100vw, 0vw"
           priority
           className="block md:hidden object-cover"
-          alt=""
+          alt="Practice Areas Mobile Banner"
           quality={90}
         />
       </div>

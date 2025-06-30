@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import VirtualInsightsGrid from "./VirtualInsightsGrid";
+import { logPerformanceReport } from "../../utils/performanceTest";
 
 function LoadingDots() {
   return (
@@ -44,13 +46,29 @@ function AllInsights({
   productionMode,
 }) {
   const [data, setData] = useState(initialData);
-  const [filteredData, setFilteredData] = useState(initialData);
   const [archives, setArchives] = useState(initialArchives);
   const [selectedArchive, setSelectedArchive] = useState(initialYear || (initialArchives[0]?.name ?? null));
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false); 
   const [isChangingArchive, setIsChangingArchive] = useState(false);
+
+  // Memoize filtered data to prevent unnecessary re-renders
+  const filteredData = useMemo(() => {
+    if (!searchTerm) return data;
+    
+    const searchLower = searchTerm.toLowerCase();
+    return data.filter(item => {
+      const title = item.title.rendered.toLowerCase();
+      const content = item.content.rendered.toLowerCase();
+      const excerpt = item.excerpt.rendered.toLowerCase();
+      return (
+        title.includes(searchLower) ||
+        content.includes(searchLower) ||
+        excerpt.includes(searchLower)
+      );
+    });
+  }, [data, searchTerm]);
 
   const fetchData = async (year, pageNum = 1, append = false) => {
     const cat1 = 12;
@@ -71,11 +89,9 @@ function AllInsights({
         if (append) {
           const newData = [...data, ...sortedData];
           setData(newData);
-          filterData(newData, searchTerm);
         } else {
           if (year === selectedArchive) {
             setData(sortedData);
-            filterData(sortedData, searchTerm);
           }
         }
         setHasMore(sortedData.length === 6);
@@ -86,33 +102,6 @@ function AllInsights({
       setIsChangingArchive(false);
     }
   };
-
-  const filterData = (dataToFilter, term) => {
-    if (!term) {
-      setFilteredData(dataToFilter);
-      setHasMore(dataToFilter.length >= 6);
-      return;
-    }
-
-    const searchLower = term.toLowerCase();
-    const filtered = dataToFilter.filter(item => {
-      const title = item.title.rendered.toLowerCase();
-      const content = item.content.rendered.toLowerCase();
-      const excerpt = item.excerpt.rendered.toLowerCase();
-      return (
-        title.includes(searchLower) ||
-        content.includes(searchLower) ||
-        excerpt.includes(searchLower)
-      );
-    });
-
-    setFilteredData(filtered);
-    setHasMore(filtered.length >= 6 && filtered.length === dataToFilter.length && dataToFilter.length === 6);
-  };
-
-  useEffect(() => {
-    filterData(data, searchTerm);
-  }, [searchTerm, data]);
 
   useEffect(() => {
     if (selectedArchive) {
@@ -129,6 +118,15 @@ function AllInsights({
     setIsLoadingMore(false);
   };
 
+  // Monitor performance after data loads
+  useEffect(() => {
+    if (data.length > 0 && !isChangingArchive) {
+      setTimeout(() => {
+        logPerformanceReport();
+      }, 500);
+    }
+  }, [data.length, isChangingArchive]);
+
   const stripHTMLAndLimit = (htmlContent) => {
     const text = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");
     return text.length > 255 ? text.substring(0, 255) + "..." : text;
@@ -144,73 +142,35 @@ function AllInsights({
   };
 
   return (
-    <div className="flex w-full flex-col md:flex-row">
-      <div className="mx-auto grid w-full grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:w-9/12 lg:p-12">
+    <main className="flex w-full flex-col md:flex-row">
+      {/* Main Content */}
+      <section className="mx-auto w-full lg:w-9/12 lg:p-12">
         {filteredData.length === 0 ? (
-          <div className="col-span-1 sm:col-span-2 text-center py-8">
+          <div className="text-center py-8">
             {isChangingArchive ? (
               <LoadingDots />
             ) : (
-              <p className="text-gray-500">No results found {searchTerm ? `for "${searchTerm}"` : ""}</p>
+              <p className="text-gray-500">
+                No results found {searchTerm ? `for "${searchTerm}"` : ""}
+              </p>
             )}
           </div>
         ) : (
-          <>
-            {filteredData.map((item) => (
-              <div
-                className="rounded-lg border border-gray-200 bg-white shadow transition-opacity duration-300"
-                key={item.id}
-              >
-                <Image
-                  src={item._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/PracticeArea/Aarna-Law-Banner-img.png"}
-                  alt={item.title.rendered}
-                  className="h-[200px] w-full rounded-t-lg object-cover"
-                  width={500}
-                  height={300}
-                  priority={true}
-                />
-                <div className="p-5">
-                  <p
-                    className="mb-2 line-clamp-2 min-h-10 text-lg font-bold tracking-tight text-gray-900"
-                    dangerouslySetInnerHTML={{ __html: item.title.rendered }}
-                  />
-                  <p
-                    className="my-5 min-h-28 text-sm font-normal text-gray-700"
-                    dangerouslySetInnerHTML={{ __html: stripHTMLAndLimit(item.excerpt.rendered) }}
-                  />
-                  <p className="pb-4 text-xs text-gray-500">
-                    {formatDateString(item.date)}
-                  </p>
-                  <Link href={`/insights/${item.slug}`} className="text-red-500">
-                    Read more
-                  </Link>
-                </div>
-              </div>
-            ))}
-            {hasMore && filteredData.length >= 6 && (
-              <div className="col-span-1 mt-6 text-center sm:col-span-2">
-                {isLoadingMore ? (
-                  <div className="inline-block px-4 py-2">
-                    <LoadingDots />
-                  </div>
-                ) : (
-                  <button
-                    onClick={loadMore}
-                    className="bg-custom-red px-4 py-2 text-white hover:bg-red-600 active:bg-red-700"
-                    disabled={isChangingArchive}
-                  >
-                    Load More
-                  </button>
-                )}
-              </div>
-            )}
-          </>
+          <VirtualInsightsGrid
+            data={filteredData}
+            searchTerm={searchTerm}
+            onLoadMore={loadMore}
+            hasMore={hasMore}
+            isLoadingMore={isLoadingMore}
+          />
         )}
-      </div>
-      <div className="mt-8 w-full bg-gray-50 p-4 pb-12 md:mt-0 md:w-3/12 md:p-4 lg:ml-8">
+      </section>
+
+      {/* Sidebar Archives */}
+      <aside className="mt-8 w-full bg-gray-50 p-4 pb-12 md:mt-0 md:w-3/12 md:p-4 lg:ml-8">
         <h2 className="font-bold">Archives</h2>
         <hr className="my-4 border-t-2 border-red-500" />
-        <ul className="space-y-4 text-left text-gray-500">
+        <nav className="space-y-4 text-left text-gray-500">
           {archives.map((archive) => (
             <button
               onClick={() => {
@@ -225,12 +185,12 @@ function AllInsights({
               key={archive.id}
               disabled={isChangingArchive}
             >
-              <p dangerouslySetInnerHTML={{ __html: archive.name }} />
+              <span dangerouslySetInnerHTML={{ __html: archive.name }} />
             </button>
           ))}
-        </ul>
-      </div>
-    </div>
+        </nav>
+      </aside>
+    </main>
   );
 }
 

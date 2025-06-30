@@ -19,7 +19,7 @@ async function fetchPracticeAreas() {
   try {
     const response = await fetch(
       `https://docs.aarnalaw.com/wp-json/wp/v2/practice-areas?_embed&per_page=100`,
-      { cache: "no-store" }
+      { next: { revalidate: 3600 } }
     );
     if (!response.ok) {
       throw new Error('Failed to fetch practice areas');
@@ -38,7 +38,7 @@ async function fetchPracticeAreaDetails(slug) {
   try {
     const response = await fetch(
       `https://docs.aarnalaw.com/wp-json/wp/v2/practice-areas?_embed&slug=${slug}`,
-      { cache: "no-store" }
+      { next: { revalidate: 3600 } }
     );
     if (!response.ok) {
       throw new Error('Failed to fetch practice area details');

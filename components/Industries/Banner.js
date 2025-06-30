@@ -13,18 +13,20 @@ export default function Banner() {
         <Image
           src="/Industries/IndutriesBanner.jpg"
           fill
+          sizes="(min-width: 768px) 100vw, 0vw"
           priority
           className="hidden md:block object-cover"
-          alt=""
+          alt="Industries Banner"
           quality={90}
         />
         {/* Mobile banner */}
         <Image
           src="/Industries/IndustriesMobileBanner.jpg"
           fill
+          sizes="(max-width: 767px) 100vw, 0vw"
           priority
           className="block md:hidden object-cover"
-          alt=""
+          alt="Industries Mobile Banner"
           quality={90}
         />
       </div>

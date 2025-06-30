@@ -21,6 +21,12 @@ const nextConfig = {
     ignoreDuringBuilds: true, // 👈 this line disables ESLint during build
   },
 
+  // Suppress React warnings about browser extension attributes
+  reactStrictMode: true,
+  experimental: {
+    suppressHydrationWarning: true,
+  },
+
   async redirects() {
     return [
       //Practice area

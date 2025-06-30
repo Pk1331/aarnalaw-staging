@@ -1,10 +1,10 @@
 export async function generateMetadata({ params }) {
     const { slug } = params;
   
-    // Fetch data with cache disabled to ensure fresh data
+    // Fetch data with cache enabled for better performance
     const res = await fetch(
       `https://docs.aarnalaw.com/wp-json/wp/v2/team?_embed&slug=${slug}`,
-      { cache: "no-store" } // Prevent caching issues
+      { cache: 'force-cache' } // Use force-cache for metadata generation
     );
   
     const data = await res.json();
@@ -14,6 +14,7 @@ export async function generateMetadata({ params }) {
       return {
         title: "Blog Not Found | Aarna Law",
         description: "The blog you are looking for is not available.",
+        metadataBase: new URL("https://www.aarnalaw.com/team/"),
         alternates: {
           canonical: "https://www.aarnalaw.com/team/",
         },
@@ -31,6 +32,7 @@ export async function generateMetadata({ params }) {
     return {
       title: blog.acf?.meta_title || blog.title.rendered,
       description: metaDescription,
+      metadataBase: new URL("https://www.aarnalaw.com/team/"),
       alternates: {
         canonical: `https://www.aarnalaw.com/team/${slug}`,
       },

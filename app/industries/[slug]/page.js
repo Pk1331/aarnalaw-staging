@@ -19,7 +19,7 @@ async function fetchIndustries() {
   try {
     const response = await fetch(
       `https://docs.aarnalaw.com/wp-json/wp/v2/industries?_embed&per_page=100`,
-      { cache: "no-store" }
+      { next: { revalidate: 3600 } }
     );
     if (!response.ok) {
       throw new Error('Failed to fetch industries');
@@ -38,7 +38,7 @@ async function fetchIndustryDetails(slug) {
   try {
     const response = await fetch(
       `https://docs.aarnalaw.com/wp-json/wp/v2/industries?_embed&slug=${slug}`,
-      { cache: "no-store" }
+      { next: { revalidate: 3600 } }
     );
     if (!response.ok) {
       throw new Error('Failed to fetch industry details');

@@ -49,7 +49,8 @@ const NavBar = () => {
               width={700}
               height={600}
               className="size-16 md:size-20"
-              loading="lazy"
+              loading="eager"
+              priority
             />
           </Link>
 
