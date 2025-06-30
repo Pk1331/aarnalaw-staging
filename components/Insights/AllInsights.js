@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import VirtualInsightsGrid from "./VirtualInsightsGrid";
+// import VirtualInsightsGrid from "./VirtualInsightsGrid";
 
 function LoadingDots() {
   return (
@@ -146,13 +146,41 @@ function AllInsights({
             )}
           </div>
         ) : (
-          <VirtualInsightsGrid
-            data={filteredData}
-            searchTerm={searchTerm}
-            onLoadMore={loadMore}
-            hasMore={hasMore}
-            isLoadingMore={isLoadingMore}
-          />
+          // WARNING: VirtualInsightsGrid was removed. Rendering a simple list for now.
+          <div className="grid gap-6 lg:grid-cols-2">
+            {filteredData.map((item, index) => (
+              <article key={item.id} className="rounded-lg border border-gray-200 bg-white shadow transition-shadow hover:shadow-lg">
+                <Image
+                  src={item._embedded?.["wp:featuredmedia"]?.[0]?.source_url || "/PracticeArea/Aarna-Law-Banner-img.png"}
+                  alt={item.title.rendered}
+                  className="h-48 w-full rounded-t-lg object-cover"
+                  width={400}
+                  height={300}
+                  priority={index < 3}
+                  loading={index < 3 ? "eager" : "lazy"}
+                />
+                <div className="p-4">
+                  <h3
+                    className="mb-2 line-clamp-2 text-lg font-bold tracking-tight text-gray-900"
+                    dangerouslySetInnerHTML={{ __html: item.title.rendered }}
+                  />
+                  <p
+                    className="mb-3 text-sm font-normal text-gray-700"
+                    dangerouslySetInnerHTML={{ __html: stripHTMLAndLimit(item.excerpt.rendered) }}
+                  />
+                  <time className="mb-3 block text-xs text-gray-500">
+                    {formatDateString(item.date)}
+                  </time>
+                  <Link 
+                    href={`/insights/${item.slug}`} 
+                    className="text-red-500 hover:text-red-600 font-medium"
+                  >
+                    Read more
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
         )}
       </section>
 

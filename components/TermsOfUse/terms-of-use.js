@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { optimizeHTMLContent } from "../../utils/contentOptimizer";
+// import { optimizeHTMLContent } from "../../utils/contentOptimizer";
 
 const TermsOfUse = () => {
   const [page, setPage] = useState(null); // State to store page data
@@ -49,7 +49,8 @@ const TermsOfUse = () => {
           <article
             className="prose max-w-none"
             dangerouslySetInnerHTML={{ 
-              __html: optimizeHTMLContent(page.content.rendered) 
+              // WARNING: This is raw HTML from the CMS. Previously optimized with optimizeHTMLContent.
+              __html: page.content.rendered 
             }}
           />
         ) : (

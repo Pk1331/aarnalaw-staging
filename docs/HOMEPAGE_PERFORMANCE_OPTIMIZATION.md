@@ -185,24 +185,19 @@ interface HomeInsightsProps {
 
 ## 📊 **Performance Monitoring**
 
-### **Real-time Metrics**
-```javascript
-// Performance monitoring in components
-useEffect(() => {
-  if (!isInitialLoading) {
-    setTimeout(() => {
-      logPerformanceReport();
-    }, 1000);
-  }
-}, [isInitialLoading]);
-```
-
 ### **Key Metrics to Track**
 - **LCP (Largest Contentful Paint)**: Target < 2.5s
 - **FID (First Input Delay)**: Target < 100ms
 - **CLS (Cumulative Layout Shift)**: Target < 0.1
 - **DOM Size**: Target < 800 elements
 - **JavaScript Bundle Size**: Target < 500KB
+
+### **Tools to Use**
+- Google PageSpeed Insights
+- GTmetrix
+- Lighthouse
+- WebPageTest
+- Chrome DevTools Performance Tab
 
 ## 🔧 **Additional Optimizations**
 
@@ -260,21 +255,5 @@ const LoadingSection = ({ height = "h-96" }: { height?: string }) => (
 3. **Optimize Further**: Based on performance reports
 4. **Implement CDN**: For better global performance
 5. **Add Service Worker**: For offline capabilities
-
-## 📞 **Monitoring & Testing**
-
-### **Tools to Use**
-- Google PageSpeed Insights
-- GTmetrix
-- Lighthouse
-- WebPageTest
-- Chrome DevTools Performance Tab
-
-### **Key Metrics to Monitor**
-- Core Web Vitals
-- Bundle sizes
-- API response times
-- Image loading performance
-- DOM size and depth
 
 This comprehensive optimization strategy should significantly improve your HomePage performance scores across all testing platforms! 

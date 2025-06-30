@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { optimizeHTMLContent } from "../../utils/contentOptimizer";
+// import { optimizeHTMLContent } from "../../utils/contentOptimizer";
 
 const Disclaimer = () => {
   const [page, setPage] = useState(null);
@@ -49,7 +49,8 @@ const Disclaimer = () => {
           <article
             className="prose max-w-none"
             dangerouslySetInnerHTML={{ 
-              __html: optimizeHTMLContent(page.content.rendered) 
+              // WARNING: This is raw HTML from the CMS. Previously optimized with optimizeHTMLContent.
+              __html: page.content.rendered 
             }}
           />
         ) : (
