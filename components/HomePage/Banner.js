@@ -55,6 +55,7 @@ export default function Banner() {
                 priority={index === 0}
                 placeholder="blur"
                 blurDataURL={banner.mobileBannerUrl}
+                quality={85}
               />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-white mt-40">
                 <h2 className="text-4xl font-bold lg:text-5xl">{banner.bannerText}</h2>
@@ -73,6 +74,7 @@ export default function Banner() {
                 priority={index === 0}
                 placeholder="blur"
                 blurDataURL={banner.bannerUrl}
+                quality={85}
               />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-white">
                 <h2 className="text-4xl font-bold lg:text-5xl">{banner.bannerText}</h2>

@@ -95,6 +95,7 @@ async function getInsights(): Promise<ProcessedInsight[]> {
   loading="eager"
   placeholder="blur"
   blurDataURL={banner.bannerUrl}
+  quality={85}
 />
 ```
 
@@ -103,6 +104,39 @@ async function getInsights(): Promise<ProcessedInsight[]> {
 - ✅ Proper `sizes` attributes
 - ✅ Blur placeholders
 - ✅ Lazy loading for non-critical images
+
+### **4.1 Image Size Optimization** ⭐ **NEW**
+**Problem**: Images served at larger sizes than needed (50 KiB savings potential)
+**Solution**: Proper image dimensions and sizes attributes
+
+```typescript
+// Logo optimization - from 700x600 to 80x80
+<Image
+  src="/logo/aarna-logo.png"
+  alt="Aarna Law Logo"
+  width={80}
+  height={80}
+  className="size-16 md:size-20"
+  sizes="(max-width: 768px) 64px, 80px"
+  priority
+/>
+
+// Insights images optimization - from 600x400 to 400x280
+<Image
+  src={item.imageUrl}
+  alt={item.title}
+  width={400}
+  height={280}
+  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+  priority={index < 2}
+/>
+```
+
+**Impact**:
+- ✅ **50 KiB bandwidth savings** per page load
+- ✅ Faster image loading
+- ✅ Reduced cellular data usage
+- ✅ Better PageSpeed Insights scores
 
 ### **5. Component Memoization**
 **Problem**: Unnecessary re-renders

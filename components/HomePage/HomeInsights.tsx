@@ -155,10 +155,11 @@ export default function HomeInsights({ initialInsights = [] }: HomeInsightsProps
                         <Image
                           src={item.imageUrl}
                           alt={item.title}
-                          width={600}
-                          height={400}
+                          width={400}
+                          height={280}
                           className="size-full object-cover"
                           priority={index < 2}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
                         />
                       </div>
                       <div className="flex flex-col items-start p-5 text-black transition-colors duration-300 md:group-hover:text-white">

@@ -23,9 +23,6 @@ const nextConfig = {
 
   // Suppress React warnings about browser extension attributes
   reactStrictMode: true,
-  experimental: {
-    suppressHydrationWarning: true,
-  },
 
   async redirects() {
     return [

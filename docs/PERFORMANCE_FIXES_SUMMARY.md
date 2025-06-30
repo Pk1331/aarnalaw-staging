@@ -87,6 +87,21 @@ sizes="100vw"
 - Provides targeted recommendations
 - Enhanced reporting with detailed insights
 
+### **9. Image Size Optimization**
+**Problem**: Images served at larger sizes than needed (50 KiB savings potential)
+**Files Fixed**:
+- `components/Header/NavBar.js`
+- `components/Footer/Footer.js`
+- `components/HomePage/HomeInsights.tsx`
+- `components/HomePage/Banner.js`
+
+**Solution**: 
+- Reduced logo image from 700x600 to 80x80 pixels
+- Reduced insights images from 600x400 to 400x280 pixels
+- Added proper `sizes` attributes for responsive loading
+- Added `quality={85}` for banner images
+- Added descriptive alt text for accessibility
+
 ## 📊 **Performance Improvements**
 
 ### **Image Optimization**

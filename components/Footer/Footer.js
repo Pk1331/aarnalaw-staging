@@ -33,11 +33,12 @@ export default function Footer() {
             <Link href="/" className="flex items-center">
               <Image
                 src="/logo/aarna-logo.png"
-                alt=""
-                width={600}
-                height={600}
+                alt="Aarna Law Logo"
+                width={80}
+                height={80}
                 className="md:h-20 md:w-20 h-20 w-20"
                 loading="lazy"
+                sizes="80px"
               />
             </Link>
             <div className="flex gap-8 py-4 ps-2">

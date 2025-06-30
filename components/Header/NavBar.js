@@ -45,12 +45,13 @@ const NavBar = () => {
           <Link href="/" className="flex items-center">
             <Image
               src="/logo/aarna-logo.png"
-              alt=""
-              width={700}
-              height={600}
+              alt="Aarna Law Logo"
+              width={80}
+              height={80}
               className="size-16 md:size-20"
               loading="eager"
               priority
+              sizes="(max-width: 768px) 64px, 80px"
             />
           </Link>
 
