@@ -8,7 +8,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { leftArrow, rightArrow } from "../../utils/icons";
 import configData from "../../config.json";
-import { logPerformanceReport } from "../../utils/performanceTest";
 
 interface Insight {
   id: number;
@@ -69,15 +68,6 @@ export default function HomeInsights({ initialInsights = [] }: HomeInsightsProps
       fetchInsights();
     }
   }, [initialInsights.length]);
-
-  // Monitor performance after component mounts
-  useEffect(() => {
-    if (!isInitialLoading) {
-      setTimeout(() => {
-        logPerformanceReport();
-      }, 1000);
-    }
-  }, [isInitialLoading]);
 
   const NextArrow = () => (
     <div

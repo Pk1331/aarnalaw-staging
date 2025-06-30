@@ -8,7 +8,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { leftArrow, rightArrow } from "../../utils/icons";
 import configData from "../../config"; // Adjust the path if needed
-import { logPerformanceReport } from "../../utils/performanceTest";
 
 export default function HomeInsights({ initialInsights = [] }) {
   const sliderRef = useRef(null);
@@ -54,15 +53,6 @@ export default function HomeInsights({ initialInsights = [] }) {
 
     fetchInsights();
   }, []);
-
-  // Monitor performance after component mounts
-  useEffect(() => {
-    if (!isInitialLoading) {
-      setTimeout(() => {
-        logPerformanceReport();
-      }, 1000);
-    }
-  }, [isInitialLoading]);
 
   const NextArrow = () => (
     <div

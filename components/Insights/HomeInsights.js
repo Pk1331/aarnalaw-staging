@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { logPerformanceReport } from "../../utils/performanceTest";
 
 const HomeInsights = ({ initialData = [], productionMode }) => {
   const [data, setData] = useState(initialData);
@@ -42,15 +41,6 @@ const HomeInsights = ({ initialData = [], productionMode }) => {
       fetchData();
     }
   }, [initialData.length]);
-
-  // Monitor performance after data loads
-  useEffect(() => {
-    if (limitedData.length > 0 && !isLoading) {
-      setTimeout(() => {
-        logPerformanceReport();
-      }, 500);
-    }
-  }, [limitedData.length, isLoading]);
 
   const stripHTMLAndLimit = (htmlContent) => {
     const text = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");

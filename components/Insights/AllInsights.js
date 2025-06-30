@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import VirtualInsightsGrid from "./VirtualInsightsGrid";
-import { logPerformanceReport } from "../../utils/performanceTest";
 
 function LoadingDots() {
   return (
@@ -117,15 +116,6 @@ function AllInsights({
     await fetchData(selectedArchive, nextPage, true);
     setIsLoadingMore(false);
   };
-
-  // Monitor performance after data loads
-  useEffect(() => {
-    if (data.length > 0 && !isChangingArchive) {
-      setTimeout(() => {
-        logPerformanceReport();
-      }, 500);
-    }
-  }, [data.length, isChangingArchive]);
 
   const stripHTMLAndLimit = (htmlContent) => {
     const text = htmlContent.replace(/<\/?[^>]+(>|$)/g, "");
