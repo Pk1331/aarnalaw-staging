@@ -27,7 +27,7 @@ const KindOfDispute = dynamic(
 const Testimonials = dynamic(
   () => import('../components/HomePage/Testimonials'),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 const TrackRecords = dynamic(
