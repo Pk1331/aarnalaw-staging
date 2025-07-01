@@ -5,6 +5,24 @@ import Footer from "../components/Footer/Footer";
 import Script from "next/script";
 import { headers } from 'next/headers';
 import { LanguageProvider } from "../app/context/LanguageContext"; // ✅ Import LanguageProvider
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Aarna Law - Leading Law Firm in India',
+  description:
+    'Aarna Law is a leading law firm in India specializing in arbitration, litigation, and corporate advisory services.',
+  metadataBase: new URL('https://www.aarnalaw.com'),
+  alternates: {
+    canonical: 'https://aarnalaw.com/',
+  },
+  openGraph: {
+    title: 'Aarna Law - Top Litigation, Dispute & Corporate Law Firm in India',
+    description:
+      'Leading corporate law firm in India offering legal services in business law, litigation, arbitration, and compliance for Indian and international companies.',
+    url: 'https://aarnalaw.com/',
+    images: '/banner/desktop_home_banner_2.jpg',
+  },
+};
 
 export default function RootLayout({
   children,

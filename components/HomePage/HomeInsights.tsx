@@ -17,14 +17,10 @@ interface Insight {
   desc: string;
 }
 
-interface HomeInsightsProps {
-  initialInsights?: Insight[];
-}
-
-export default function HomeInsights({ initialInsights = [] }: HomeInsightsProps) {
+export default function HomeInsights() {
   const sliderRef = useRef<InsightSlider>(null);
-  const [insightsData, setInsightsData] = useState<Insight[]>(initialInsights);
-  const isInitialLoading = insightsData.length === 0;
+  const [insightsData, setInsightsData] = useState<Insight[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchInsights = async () => {
@@ -60,14 +56,13 @@ export default function HomeInsights({ initialInsights = [] }: HomeInsightsProps
         setInsightsData(latestInsights);
       } catch (error) {
         console.error("Failed to fetch insights:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    // Only fetch if no initial insights provided
-    if (initialInsights.length === 0) {
-      fetchInsights();
-    }
-  }, [initialInsights.length]);
+    fetchInsights();
+  }, []);
 
   const NextArrow = () => (
     <div
@@ -136,7 +131,7 @@ export default function HomeInsights({ initialInsights = [] }: HomeInsightsProps
         {/* Slider Content */}
         <div className="mx-auto w-11/12 lg:w-10/12">
           <InsightSlider ref={sliderRef} {...settings}>
-            {isInitialLoading
+            {isLoading
               ? [...Array(2)].map((_, i) => <SkeletonCard key={i} />)
               : insightsData.map((item, index) => (
                   <article key={item.id} className="lg:ms-5 lg:p-4">

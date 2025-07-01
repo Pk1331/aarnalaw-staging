@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "./context/LanguageContext";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,6 +50,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-YWL8EWE9MB"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-WJW9WNHQ"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="https://www.clarity.ms/s/0.8.13-beta/clarity.js"
+          strategy="lazyOnload"
+        />
+      </head>
       <body className={inter.className} suppressHydrationWarning={true}>
         <LanguageProvider>
           {children}

@@ -1,12 +1,50 @@
-import Banner from '../components/HomePage/Banner';
-import HomeInsights from '@/components/HomePage/HomeInsights';
-import WhatWeDo from '../components/HomePage/WhatWeDo';
-import KindOfDispute from '../components/HomePage/KindOfDisputesWeDo';
-import Testimonials from '../components/HomePage/Testimonials';
-import TrackRecords from '../components/HomePage/Trackrecords';
-import OurCredentials from '../components/HomePage/OurCredentials';
-import OurNetwork from '../components/HomePage/OurNetwork';
+import dynamic from 'next/dynamic';
 import configData from '../config.json';
+
+// Dynamically import all homepage components
+const Banner = dynamic(() => import('../components/HomePage/Banner'), {
+  ssr: false,
+  loading: () => <div className="h-[70vh] w-full bg-gray-100 animate-pulse" />,
+});
+
+const HomeInsights = dynamic(
+  () => import('@/components/HomePage/HomeInsights'),
+  {
+    ssr: false,
+    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+  }
+);
+
+const WhatWeDo = dynamic(() => import('../components/HomePage/WhatWeDo'), {
+  ssr: false,
+});
+const KindOfDispute = dynamic(
+  () => import('../components/HomePage/KindOfDisputesWeDo'),
+  {
+    ssr: false,
+  }
+);
+const Testimonials = dynamic(
+  () => import('../components/HomePage/Testimonials'),
+  {
+    ssr: false,
+  }
+);
+const TrackRecords = dynamic(
+  () => import('../components/HomePage/Trackrecords'),
+  {
+    ssr: false,
+  }
+);
+const OurCredentials = dynamic(
+  () => import('../components/HomePage/OurCredentials'),
+  {
+    ssr: false,
+  }
+);
+const OurNetwork = dynamic(() => import('../components/HomePage/OurNetwork'), {
+  ssr: false,
+});
 
 export const metadata = {
   title: 'Aarna Law - Leading Law Firm in India',
@@ -36,15 +74,7 @@ interface InsightPost {
   };
 }
 
-interface ProcessedInsight {
-  id: number;
-  imageUrl: string;
-  title: string;
-  desc: string;
-  slug: string;
-}
-
-async function getInsights(): Promise<ProcessedInsight[]> {
+async function getInsights() {
   try {
     const domain =
       process.env.NODE_ENV === 'production'
@@ -59,12 +89,7 @@ async function getInsights(): Promise<ProcessedInsight[]> {
     const page = 8;
     const insightsResponse = await fetch(
       `${configData.SERVER_URL}posts?_embed&categories[]=13&status[]=publish&production_mode[]=${server}&per_page=${page}`,
-      { 
-        next: { revalidate: 0 },
-        headers: {
-          'Cache-Control': 'public, max-age=300, stale-while-revalidate=600'
-        }
-      }
+      { next: { revalidate: 300 } }
     );
 
     if (!insightsResponse.ok) {
@@ -95,7 +120,7 @@ export default async function Home() {
   return (
     <>
       <Banner />
-      <HomeInsights initialInsights={initialInsights} />
+      <HomeInsights />
       <WhatWeDo />
       <KindOfDispute />
       <Testimonials />
