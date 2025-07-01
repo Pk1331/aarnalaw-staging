@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import dynamic from 'next/dynamic';
 import configData from '../config.json';
 
@@ -7,13 +8,8 @@ const Banner = dynamic(() => import('../components/HomePage/Banner'), {
   loading: () => <div className="h-[70vh] w-full bg-gray-100 animate-pulse" />,
 });
 
-const HomeInsights = dynamic(
-  () => import('@/components/HomePage/HomeInsights'),
-  {
-    ssr: true,
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-  }
-);
+const HomeInsightsSSR = dynamic(() => import('@/components/HomePage/HomeInsights'), { ssr: true });
+const HomeInsightsCSR = dynamic(() => import('@/components/HomePage/HomeInsights'), { ssr: false });
 
 const WhatWeDo = dynamic(() => import('../components/HomePage/WhatWeDo'), {
   ssr: true,
@@ -115,13 +111,21 @@ async function getInsights() {
   }
 }
 
+function isMobileUserAgent(userAgent: string) {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+}
+
 export default async function Home() {
+  const headersList = headers();
+  const userAgent = headersList.get('user-agent') || '';
+  const isMobile = isMobileUserAgent(userAgent);
+
   const initialInsights = await getInsights();
 
   return (
     <>
       <Banner />
-      <HomeInsights />
+      {isMobile ? <HomeInsightsCSR /> : <HomeInsightsSSR />}
       <WhatWeDo />
       <KindOfDispute />
       <Testimonials />
