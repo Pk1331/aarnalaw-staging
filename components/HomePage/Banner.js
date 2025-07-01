@@ -51,10 +51,8 @@ export default function Banner() {
                 fill
                 sizes="(max-width: 768px) 100vw, 0vw"
                 style={{ objectFit: 'cover' }}
-                loading="eager"
+                loading={index === 0 ? "eager" : "lazy"}
                 priority={index === 0}
-                placeholder="blur"
-                blurDataURL={banner.mobileBannerUrl}
                 quality={85}
               />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-white mt-40">
@@ -70,10 +68,8 @@ export default function Banner() {
                 fill
                 sizes="(min-width: 1024px) 100vw, 0vw"
                 style={{ objectFit: 'cover' }}
-                loading="eager"
+                loading={index === 0 ? "eager" : "lazy"}
                 priority={index === 0}
-                placeholder="blur"
-                blurDataURL={banner.bannerUrl}
                 quality={85}
               />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-white">

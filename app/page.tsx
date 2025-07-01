@@ -3,20 +3,20 @@ import configData from '../config.json';
 
 // Dynamically import all homepage components
 const Banner = dynamic(() => import('../components/HomePage/Banner'), {
-  ssr: false,
+  ssr: true,
   loading: () => <div className="h-[70vh] w-full bg-gray-100 animate-pulse" />,
 });
 
 const HomeInsights = dynamic(
   () => import('@/components/HomePage/HomeInsights'),
   {
-    ssr: false,
+    ssr: true,
     loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
   }
 );
 
 const WhatWeDo = dynamic(() => import('../components/HomePage/WhatWeDo'), {
-  ssr: false,
+  ssr: true,
 });
 const KindOfDispute = dynamic(
   () => import('../components/HomePage/KindOfDisputesWeDo'),
