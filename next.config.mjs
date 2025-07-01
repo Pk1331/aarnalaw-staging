@@ -24,6 +24,57 @@ const nextConfig = {
   // Suppress React warnings about browser extension attributes
   reactStrictMode: true,
 
+  // Webpack optimization for better performance
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Optimize bundle splitting
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          // Vendor chunks for better caching
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+          },
+          // Common chunks for shared code
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          // React and React DOM in separate chunk
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            chunks: 'all',
+            priority: 20,
+          },
+          // Third-party libraries
+          thirdParty: {
+            test: /[\\/]node_modules[\\/](slick-carousel|react-slick)[\\/]/,
+            name: 'third-party',
+            chunks: 'all',
+            priority: 15,
+          },
+        },
+      },
+      // Reduce bundle size
+      minimize: true,
+    };
+
+    return config;
+  },
+
+  // Experimental features for better performance
+  experimental: {
+    optimizePackageImports: ['react-slick', 'slick-carousel'],
+  },
+
   async redirects() {
     return [
       //Practice area

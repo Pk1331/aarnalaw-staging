@@ -55,7 +55,7 @@ export default function RootLayout({
           <Footer />
         </LanguageProvider>
 
-        {/* Schema */}
+        {/* Schema - Load immediately for SEO */}
         <Script
           id="website-schema"
           type="application/ld+json"
@@ -72,36 +72,7 @@ export default function RootLayout({
               },
             }),
           }}
-          strategy="afterInteractive"
-        />
-
-        {/* Performance Monitoring */}
-        <Script
-          id="performance-monitor"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Monitor DOM size
-              function monitorDOMSize() {
-                const totalElements = document.getElementsByTagName('*').length;
-                const bodyElements = document.body.getElementsByTagName('*').length;
-                
-                if (totalElements > 800) {
-                  console.warn('High DOM size detected:', totalElements, 'elements');
-                }
-                
-                return { totalElements, bodyElements };
-              }
-              
-              // Monitor on page load and after dynamic content loads
-              window.addEventListener('load', () => {
-                setTimeout(monitorDOMSize, 1000);
-              });
-              
-              // Monitor periodically
-              setInterval(monitorDOMSize, 10000);
-            `
-          }}
+          strategy="beforeInteractive"
         />
 
         {/* GTM Noscript */}
@@ -114,16 +85,24 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
-        {/* Tracking Scripts */}
-        <Script src="/tracking.js" strategy="afterInteractive" />
-        <Script
-          src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
-          strategy="afterInteractive"
-        />
+        {/* Critical scripts - Load after page becomes interactive */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-YWL8EWE9MB"
           strategy="afterInteractive"
-          async
+        />
+        
+        {/* Non-critical scripts - Load with delay to reduce initial CPU usage */}
+        <Script
+          src="/tracking.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://www.clarity.ms/s/0.8.15/clarity.js"
+          strategy="lazyOnload"
         />
       </body>
     </html>
