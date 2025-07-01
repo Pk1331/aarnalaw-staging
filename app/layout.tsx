@@ -46,6 +46,22 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" sizes="any" />
         <ThemeModeScript />
         <meta name="msvalidate.01" content="A827D56A91561DA21E2E94273F4D52D5" />
+        
+        {/* Preload critical banner images for better LCP */}
+        <link
+          rel="preload"
+          href="/banner/desktop_home_banner_2.jpg"
+          as="image"
+          type="image/jpeg"
+          media="(min-width: 1024px)"
+        />
+        <link
+          rel="preload"
+          href="/banner/mobile_home_banner_02.jpg"
+          as="image"
+          type="image/jpeg"
+          media="(max-width: 1023px)"
+        />
       </head>
       <body>
         {/* ✅ Wrap the entire app with LanguageProvider */}

@@ -43,38 +43,43 @@ export default function Banner() {
             className={`relative w-full ${index === currentIndex ? "block" : "hidden"}`}
             data-carousel-item
           >
-            {/* Mobile Banner */}
-            <div className="relative w-full h-[70vh] aspect-[414/500] lg:hidden">
+            {/* Mobile Banner - Optimized for LCP */}
+            <div className="relative w-full h-[70vh] lg:hidden">
               <Image
                 src={banner.mobileBannerUrl}
                 alt={banner.bannerText}
-                fill
-                sizes="(max-width: 768px) 100vw, 0vw"
-                style={{ objectFit: 'cover' }}
-                loading="eager"
+                width={414}
+                height={500}
+                className="w-full h-full object-cover"
+                sizes="(max-width: 768px) 100vw"
                 priority={index === 0}
-                placeholder="blur"
-                blurDataURL={banner.mobileBannerUrl}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                loading={index === 0 ? "eager" : "lazy"}
                 quality={85}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-white mt-40">
                 <h2 className="text-4xl font-bold lg:text-5xl">{banner.bannerText}</h2>
                 <p className="py-8 text-xl lg:w-7/12">{banner.bannerPara}</p>
               </div>
             </div>
-            {/* Desktop Banner */}
-            <div className="relative w-full h-screen aspect-[1335/940] hidden lg:block">
+            
+            {/* Desktop Banner - Optimized for LCP */}
+            <div className="relative w-full h-screen hidden lg:block">
               <Image
                 src={banner.bannerUrl}
                 alt={banner.bannerText}
-                fill
-                sizes="(min-width: 1024px) 100vw, 0vw"
-                style={{ objectFit: 'cover' }}
-                loading="eager"
+                width={1335}
+                height={940}
+                className="w-full h-full object-cover"
+                sizes="(min-width: 1024px) 100vw"
                 priority={index === 0}
-                placeholder="blur"
-                blurDataURL={banner.bannerUrl}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                loading={index === 0 ? "eager" : "lazy"}
                 quality={85}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               />
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-white">
                 <h2 className="text-4xl font-bold lg:text-5xl">{banner.bannerText}</h2>
