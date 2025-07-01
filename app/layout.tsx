@@ -4,7 +4,7 @@ import Header from "../components/Header/NavBar";
 import Footer from "../components/Footer/Footer";
 import Script from "next/script";
 import { headers } from 'next/headers';
-import { LanguageProvider } from "../app/context/LanguageContext"; // ✅ Import LanguageProvider
+import { LanguageProvider } from "../app/context/LanguageContext";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -46,32 +46,15 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" sizes="any" />
         <ThemeModeScript />
         <meta name="msvalidate.01" content="A827D56A91561DA21E2E94273F4D52D5" />
-        
-        {/* Preload critical banner images for better LCP */}
-        <link
-          rel="preload"
-          href="/banner/desktop_home_banner_2.jpg"
-          as="image"
-          type="image/jpeg"
-          media="(min-width: 1024px)"
-        />
-        <link
-          rel="preload"
-          href="/banner/mobile_home_banner_02.jpg"
-          as="image"
-          type="image/jpeg"
-          media="(max-width: 1023px)"
-        />
       </head>
       <body>
-        {/* ✅ Wrap the entire app with LanguageProvider */}
         <LanguageProvider>
           <Header />
           {children}
           <Footer />
         </LanguageProvider>
 
-        {/* Schema - Load immediately for SEO */}
+        {/* Schema */}
         <Script
           id="website-schema"
           type="application/ld+json"
@@ -88,7 +71,36 @@ export default function RootLayout({
               },
             }),
           }}
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
+        />
+
+        {/* Performance Monitoring */}
+        <Script
+          id="performance-monitor"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Monitor DOM size
+              function monitorDOMSize() {
+                const totalElements = document.getElementsByTagName('*').length;
+                const bodyElements = document.body.getElementsByTagName('*').length;
+                
+                if (totalElements > 800) {
+                  console.warn('High DOM size detected:', totalElements, 'elements');
+                }
+                
+                return { totalElements, bodyElements };
+              }
+              
+              // Monitor on page load and after dynamic content loads
+              window.addEventListener('load', () => {
+                setTimeout(monitorDOMSize, 1000);
+              });
+              
+              // Monitor periodically
+              setInterval(monitorDOMSize, 10000);
+            `
+          }}
         />
 
         {/* GTM Noscript */}
@@ -101,24 +113,16 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
-        {/* Critical scripts - Load after page becomes interactive */}
+        {/* Tracking Scripts */}
+        <Script src="/tracking.js" strategy="afterInteractive" />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
+          strategy="afterInteractive"
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-YWL8EWE9MB"
           strategy="afterInteractive"
-        />
-        
-        {/* Non-critical scripts - Load with delay to reduce initial CPU usage */}
-        <Script
-          src="/tracking.js"
-          strategy="lazyOnload"
-        />
-        <Script
-          src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"
-          strategy="lazyOnload"
-        />
-        <Script
-          src="https://www.clarity.ms/s/0.8.15/clarity.js"
-          strategy="lazyOnload"
+          async
         />
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InsightSlider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -22,70 +22,67 @@ export default function HomeInsights() {
   const [insightsData, setInsightsData] = useState<Insight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Memoize the fetch function to prevent unnecessary re-creations
-  const fetchInsights = useCallback(async () => {
-    try {
-      const domain = window.location.hostname;
-      const isLiveDomain =
-        domain === configData.LIVE_SITE_URL ||
-        domain === configData.LIVE_SITE_URL_WWW;
+  useEffect(() => {
+    const fetchInsights = async () => {
+      try {
+        const domain = window.location.hostname;
+        const isLiveDomain =
+          domain === configData.LIVE_SITE_URL ||
+          domain === configData.LIVE_SITE_URL_WWW;
 
-      const server = isLiveDomain
-        ? configData.LIVE_PRODUCTION_SERVER_ID
-        : configData.STAG_PRODUCTION_SERVER_ID;
+        const server = isLiveDomain
+          ? configData.LIVE_PRODUCTION_SERVER_ID
+          : configData.STAG_PRODUCTION_SERVER_ID;
 
-      const page = 8;
-      const insightsResponse = await fetch(
-        `${configData.SERVER_URL}posts?_embed&categories[]=13&status[]=publish&production_mode[]=${server}&per_page=${page}`
-      );
-      const posts = await insightsResponse.json();
+        const page = 8;
+        const insightsResponse = await fetch(
+          `${configData.SERVER_URL}posts?_embed&categories[]=13&status[]=publish&production_mode[]=${server}&per_page=${page}`
+        );
+        const posts = await insightsResponse.json();
 
-      const latestInsights = posts
-        .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 6)
-        .map((item: any) => ({
-          id: item.id,
-          slug: item.slug,
-          imageUrl:
-            item._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
-            "/insights/InsightsBanner.jpg",
-          title: item.title.rendered,
-          desc: item.excerpt.rendered,
-        }));
+        const latestInsights = posts
+          .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+          .slice(0, 6)
+          .map((item: any) => ({
+            id: item.id,
+            slug: item.slug,
+            imageUrl:
+              item._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+              "/insights/InsightsBanner.jpg",
+            title: item.title.rendered,
+            desc: item.excerpt.rendered,
+          }));
 
-      setInsightsData(latestInsights);
-    } catch (error) {
-      console.error("Failed to fetch insights:", error);
-    } finally {
-      setIsLoading(false);
-    }
+        setInsightsData(latestInsights);
+      } catch (error) {
+        console.error("Failed to fetch insights:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchInsights();
   }, []);
 
-  useEffect(() => {
-    fetchInsights();
-  }, [fetchInsights]);
-
-  // Memoize arrow components to prevent unnecessary re-renders
-  const NextArrow = useCallback(() => (
+  const NextArrow = () => (
     <div
       className="cursor-pointer rounded-full bg-custom-blue p-3 text-xl text-white hover:bg-custom-red"
       onClick={() => sliderRef.current?.slickNext()}
     >
       {rightArrow}
     </div>
-  ), []);
+  );
 
-  const PrevArrow = useCallback(() => (
+  const PrevArrow = () => (
     <div
       className="cursor-pointer rounded-full bg-custom-blue p-3 text-xl text-white hover:bg-custom-red"
       onClick={() => sliderRef.current?.slickPrev()}
     >
       {leftArrow}
     </div>
-  ), []);
+  );
 
-  // Memoize slider settings
-  const settings = useMemo(() => ({
+  const settings = {
     speed: 500,
     slidesToShow: 2,
     slidesToScroll: 1,
@@ -99,10 +96,9 @@ export default function HomeInsights() {
         },
       },
     ],
-  }), []);
+  };
 
-  // Memoize skeleton component
-  const SkeletonCard = useCallback(() => (
+  const SkeletonCard = () => (
     <div className="animate-pulse lg:ms-5 lg:p-4">
       <div className="h-[450px] w-full flex-col border border-gray-200 bg-white shadow lg:h-[620px]">
         <div className="h-[200px] w-full bg-gray-200 md:h-[280px]" />
@@ -114,50 +110,7 @@ export default function HomeInsights() {
         </div>
       </div>
     </div>
-  ), []);
-
-  // Memoize the insights cards to prevent unnecessary re-renders
-  const insightsCards = useMemo(() => {
-    if (isLoading) {
-      return [...Array(2)].map((_, i) => <SkeletonCard key={i} />);
-    }
-
-    return insightsData.map((item, index) => (
-      <article key={item.id} className="lg:ms-5 lg:p-4">
-        <div className="group relative h-[450px] w-full border border-gray-200 bg-white shadow transition-colors duration-300 lg:h-[620px] md:hover:bg-custom-red md:hover:text-white">
-          <div className="relative h-[200px] w-full overflow-hidden bg-gray-200 md:h-[280px]">
-            <Image
-              src={item.imageUrl}
-              alt={item.title}
-              width={400}
-              height={280}
-              className="size-full object-cover"
-              priority={index < 2}
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
-            />
-          </div>
-          <div className="flex flex-col items-start p-5 text-black transition-colors duration-300 md:group-hover:text-white">
-            <h3
-              className="mb-3 line-clamp-2 max-h-[4.5rem] min-h-12 overflow-hidden text-lg font-semibold text-custom-blue transition-colors duration-300 md:text-2xl md:group-hover:text-white"
-              dangerouslySetInnerHTML={{ __html: item.title }}
-            />
-            {item.desc && (
-              <p
-                className="mb-5 line-clamp-3 text-left text-sm font-normal text-custom-gray transition-colors duration-300 md:text-base md:group-hover:text-white lg:mt-10"
-                dangerouslySetInnerHTML={{ __html: item.desc }}
-              />
-            )}
-            <Link
-              href={`/insights/${item.slug}`}
-              className="absolute bottom-0 left-[35%] m-5 mx-auto block border border-custom-red p-2 text-custom-red transition-colors duration-300 hover:bg-white hover:text-black md:left-5 md:mx-0 md:px-6 md:group-hover:bg-white md:group-hover:text-black"
-            >
-              View Article
-            </Link>
-          </div>
-        </div>
-      </article>
-    ));
-  }, [insightsData, isLoading, SkeletonCard]);
+  );
 
   return (
     <section className="bg-white lg:mt-10 lg:w-11/12">
@@ -178,7 +131,43 @@ export default function HomeInsights() {
         {/* Slider Content */}
         <div className="mx-auto w-11/12 lg:w-10/12">
           <InsightSlider ref={sliderRef} {...settings}>
-            {insightsCards}
+            {isLoading
+              ? [...Array(2)].map((_, i) => <SkeletonCard key={i} />)
+              : insightsData.map((item, index) => (
+                  <article key={item.id} className="lg:ms-5 lg:p-4">
+                    <div className="group relative h-[450px] w-full border border-gray-200 bg-white shadow transition-colors duration-300 lg:h-[620px] md:hover:bg-custom-red md:hover:text-white">
+                      <div className="relative h-[200px] w-full overflow-hidden bg-gray-200 md:h-[280px]">
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.title}
+                          width={400}
+                          height={280}
+                          className="size-full object-cover"
+                          priority={index < 2}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+                        />
+                      </div>
+                      <div className="flex flex-col items-start p-5 text-black transition-colors duration-300 md:group-hover:text-white">
+                        <h3
+                          className="mb-3 line-clamp-2 max-h-[4.5rem] min-h-12 overflow-hidden text-lg font-semibold text-custom-blue transition-colors duration-300 md:text-2xl md:group-hover:text-white"
+                          dangerouslySetInnerHTML={{ __html: item.title }}
+                        />
+                        {item.desc && (
+                          <p
+                            className="mb-5 line-clamp-3 text-left text-sm font-normal text-custom-gray transition-colors duration-300 md:text-base md:group-hover:text-white lg:mt-10"
+                            dangerouslySetInnerHTML={{ __html: item.desc }}
+                          />
+                        )}
+                        <Link
+                          href={`/insights/${item.slug}`}
+                          className="absolute bottom-0 left-[35%] m-5 mx-auto block border border-custom-red p-2 text-custom-red transition-colors duration-300 hover:bg-white hover:text-black md:left-5 md:mx-0 md:px-6 md:group-hover:bg-white md:group-hover:text-black"
+                        >
+                          View Article
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                ))}
           </InsightSlider>
 
           <div className="mt-6 flex justify-center md:ms-3">
