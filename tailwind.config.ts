@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Montserrat", "sans-serif"],
+        sans: ["var(--font-montserrat)", "Montserrat", "sans-serif"],
       },
       colors: {
         bgDark: "#22223b",

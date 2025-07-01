@@ -6,6 +6,23 @@ import Script from "next/script";
 import { headers } from 'next/headers';
 import { LanguageProvider } from "../app/context/LanguageContext";
 import { Metadata } from 'next';
+import { Inter, Montserrat } from "next/font/google";
+
+// Optimize Google Fonts loading
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap', // Prevents render-blocking
+  preload: true,
+  fallback: ['system-ui', 'arial']
+});
+
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  display: 'swap', // Prevents render-blocking
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+  variable: '--font-montserrat'
+});
 
 export const metadata: Metadata = {
   title: 'Aarna Law - Leading Law Firm in India',
@@ -61,8 +78,19 @@ export default function RootLayout({
           type="image/jpeg"
           media="(max-width: 1023px)"
         />
+        {/* Preload Google Fonts to eliminate render-blocking */}
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
-      <body>
+      <body className={`${inter.className} ${montserrat.variable}`}>
         <LanguageProvider>
           <Header />
           {children}
