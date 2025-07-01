@@ -4,19 +4,17 @@ import configData from '../config.json';
 // Dynamically import all homepage components
 const Banner = dynamic(() => import('../components/HomePage/Banner'), {
   ssr: true,
-  loading: () => <div className="h-[70vh] w-full bg-gray-100 animate-pulse" />,
 });
 
 const HomeInsights = dynamic(
   () => import('@/components/HomePage/HomeInsights'),
   {
-    ssr: true,
-    loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+    ssr: false,
   }
 );
 
 const WhatWeDo = dynamic(() => import('../components/HomePage/WhatWeDo'), {
-  ssr: true,
+  ssr: false,
 });
 const KindOfDispute = dynamic(
   () => import('../components/HomePage/KindOfDisputesWeDo'),
