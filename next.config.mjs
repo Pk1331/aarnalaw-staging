@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "www.aarnalaw.com",
       },
+      {
+        protocol: "http",
+        hostname: "aarnalaw-test.local",
+      },
     ],
   },
 
