@@ -18,16 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta
-          name="robots"
-          content={isStaging ? "noindex, nofollow" : "index, follow"}
-        />
+        <meta name="robots" content="noindex, nofollow" />
+
         <link rel="icon" href="/favicon.png" sizes="any" />
         <ThemeModeScript />
-        <meta
-          name="msvalidate.01"
-          content="A827D56A91561DA21E2E94273F4D52D5"
-        />
+        <meta name="msvalidate.01" content="A827D56A91561DA21E2E94273F4D52D5" />
       </head>
       <body>
         <LanguageProvider>
@@ -69,14 +64,26 @@ export default function RootLayout({
                   { "@type": "Person", name: "Kamala Naganand" },
                 ],
                 employee: [
-                  { "@type": "Person", name: "Evneet Kaur Uppal", jobTitle: "Partner" },
+                  {
+                    "@type": "Person",
+                    name: "Evneet Kaur Uppal",
+                    jobTitle: "Partner",
+                  },
                   {
                     "@type": "Person",
                     name: "Meghna Talwar",
                     jobTitle: "Partner - Litigation and Securities Law",
                   },
-                  { "@type": "Person", name: "Spandana Ashwath", jobTitle: "Partner" },
-                  { "@type": "Person", name: "Apoorva Guruprasad", jobTitle: "Partner" },
+                  {
+                    "@type": "Person",
+                    name: "Spandana Ashwath",
+                    jobTitle: "Partner",
+                  },
+                  {
+                    "@type": "Person",
+                    name: "Apoorva Guruprasad",
+                    jobTitle: "Partner",
+                  },
                 ],
 
                 // ✅ Added aggregateRating
@@ -202,7 +209,7 @@ export default function RootLayout({
                 ],
               },
               null,
-              2
+              2,
             ),
           }}
           strategy="afterInteractive"

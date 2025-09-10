@@ -28,7 +28,7 @@ const cityToCategoryId = {
   Bengaluru: 482,
   Mumbai: 483,
   Delhi: 484,
-  // Bangalore : 482,
+  Bangalore: 482,
   // Add more cities and their category IDs here
 };
 
@@ -47,6 +47,7 @@ function getCookieFromHeader(cookieHeader, name) {
 }
 
 async function getPracticeAreas(productionMode, city, page = 1, perPage = 13) {
+  console.log("Fetching practice areas for city:", city);
   let categoryId = cityToCategoryId[city] || null;
   let url = `${config.SERVER_URL}practice-areas?status[]=publish&production_mode[]=${productionMode}&per_page=${perPage}&page=${page}`;
   if (categoryId) {

@@ -5,7 +5,7 @@
   "STAG_PRODUCTION_SERVER_ID": "470",
   "LIVE_SITE_URL_WWW": "www.aarnalaw.com",
   "LIVE_SITE_URL": "aarnalaw.com",
-  "STAGING_SITE_URL": "https://aarnalaw-staging.vercel.app",
+  "STAGING_SITE_URL": "localhost:3002",
   "PUBLICATION_USER_FORM": "https://docs.aarnalaw.com/wp-json/contact-form-7/v1/contact-forms/20606/feedback"
 }
 
